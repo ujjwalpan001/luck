@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Customer page for CheatingPap Web App. Send messages and try your luck.">
+    <title>Customer Hub | CheatingPap</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome</h1>
+        <p class="subtitle">Interact with our backend or try your luck below</p>
+        
+        <div class="grid-container">
+            <!-- Luck Button Section -->
+            <div>
+                <button id="luck-btn" class="btn btn-luck">🍀 Try Your Luck</button>
+            </div>
+            
+            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.5rem 0;">
+            
+            <!-- Message Sending Section -->
+            <div class="input-group">
+                <label for="message-input" class="section-title">Send a Message to Admin</label>
+                <div class="input-row">
+                    <input type="text" id="message-input" placeholder="Type your message here..." autocomplete="off">
+                    <button id="send-btn" class="btn btn-primary">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <span id="toast-text">Message sent successfully!</span>
+    </div>
+
+    <script>
+        const luckBtn = document.getElementById('luck-btn');
+        const messageInput = document.getElementById('message-input');
+        const sendBtn = document.getElementById('send-btn');
+        const toast = document.getElementById('toast');
+        const toastText = document.getElementById('toast-text');
+
+        // Helper to show toast
+        function showToast(text, type = 'success') {
+            toastText.textContent = text;
+            toast.className = 'toast show';
+            if (type === 'success') {
+                toast.classList.add('toast-success');
+            } else {
+                toast.classList.add('toast-error');
+            }
+            setTimeout(() => {
+                toast.className = 'toast';
+            }, 3000);
+        }
+
+        // Handle Luck Button Click
+        luckBtn.addEventListener('click', async () => {
+            try {
+                // Fetch the configured URL from the backend dynamically
+                const response = await fetch('/api/luck-link');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch link');
+                }
+                const data = await response.json();
+                if (data.url) {
+                    window.open(data.url, '_blank');
+                } else {
+                    window.open('https://www.google.com', '_blank');
+                }
+            } catch (error) {
+                console.error('Error fetching luck link, defaulting:', error);
+                window.open('https://www.google.com', '_blank');
+            }
+        });
+
+        // Handle Send Message
+        async function sendMessage() {
+            const content = messageInput.value.trim();
+            if (!content) {
+                showToast('Please enter a message first.', 'error');
+                return;
+            }
+
+            // Disable button/input during sending
+            sendBtn.disabled = true;
+            messageInput.disabled = true;
+
+            try {
+                const response = await fetch('/api/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ content })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    showToast('Message delivered successfully!');
+                    messageInput.value = '';
+                } else {
+                    showToast(data.detail || 'Failed to deliver message.', 'error');
+                }
+            } catch (error) {
+                console.error('Error sending message:', error);
+                showToast('Network error. Failed to reach server.', 'error');
+            } finally {
+                sendBtn.disabled = false;
+                messageInput.disabled = false;
+            }
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
