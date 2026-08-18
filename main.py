@@ -25,8 +25,7 @@ app.add_middleware(
 class MessageRequest(BaseModel):
     content: str
 
-class LuckLinkRequest(BaseModel):
-    url: str
+
 
 # API Endpoints
 @app.get("/api/health")
@@ -41,30 +40,26 @@ async def send_message(req: MessageRequest):
     if not content_stripped:
         raise HTTPException(status_code=400, detail="Message content cannot be empty")
     
-    saved_msg = await db.save_message(content_stripped)
-    return {"status": "success", "message": saved_msg}
+    try:
+        saved_msg = await db.save_message(content_stripped)
+        return {"status": "success", "message": saved_msg}
+    except Exception as e:
+        import logging
+        logging.getLogger("main").error(f"Error saving message: {e}")
+        raise HTTPException(status_code=503, detail="Database connection issue. Message could not be saved.")
 
 @app.get("/api/messages")
 async def get_messages():
     """Retrieve messages for the admin view."""
-    messages = await db.get_messages()
-    return {"status": "success", "messages": messages}
+    try:
+        messages = await db.get_messages()
+        return {"status": "success", "messages": messages}
+    except Exception as e:
+        import logging
+        logging.getLogger("main").error(f"Error getting messages: {e}")
+        return {"status": "warning", "messages": [], "detail": "Database connection offline"}
 
-@app.get("/api/luck-link")
-async def get_luck_link():
-    """Get the currently configured Luck Link."""
-    url = await db.get_luck_link()
-    return {"url": url}
 
-@app.post("/api/luck-link")
-async def update_luck_link(req: LuckLinkRequest):
-    """Update the Luck Link (Admin action)."""
-    url_str = req.url.strip()
-    if not url_str.startswith(("http://", "https://")):
-        raise HTTPException(status_code=400, detail="Invalid URL protocol. Must start with http:// or https://")
-    
-    updated_url = await db.update_luck_link(url_str)
-    return {"status": "success", "url": updated_url}
 
 # Serve Front-End Pages
 @app.get("/")

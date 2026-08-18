@@ -22,47 +22,22 @@
         </header>
 
         <!-- Main Dashboard Content -->
-        <div class="admin-grid">
-            <!-- Left Side: Config -->
-            <div class="admin-panel">
-                <h2 class="section-title" style="margin-bottom: 0.25rem;">Settings</h2>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Update the link for the customer's "Luck" button.</p>
-                
-                <div class="input-group">
-                    <label for="luck-link-input" style="font-size: 0.9rem; font-weight: 500;">Luck Button URL</label>
-                    <input type="url" id="luck-link-input" placeholder="https://example.com" autocomplete="off">
-                </div>
-                
-                <button id="save-link-btn" class="btn btn-secondary" style="width: 100%;">Save Redirect Link</button>
+        <div class="admin-panel">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <h2 class="section-title" style="margin-bottom: 0;">Messages Feed</h2>
+                <span id="message-count" style="font-size: 0.8rem; padding: 0.2rem 0.6rem; border-radius: 20px; background: rgba(255,255,255,0.06); color: var(--text-secondary); border: 1px solid var(--border-color);">0 messages</span>
             </div>
-
-            <!-- Right Side: Message Feed -->
-            <div class="admin-panel">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                    <h2 class="section-title" style="margin-bottom: 0;">Messages Feed</h2>
-                    <span id="message-count" style="font-size: 0.8rem; padding: 0.2rem 0.6rem; border-radius: 20px; background: rgba(255,255,255,0.06); color: var(--text-secondary); border: 1px solid var(--border-color);">0 messages</span>
-                </div>
-                <div id="message-list" class="message-list">
-                    <div class="no-messages">Loading messages...</div>
-                </div>
+            <div id="message-list" class="message-list">
+                <div class="no-messages">Loading messages...</div>
             </div>
         </div>
-    </div>
-
-    <!-- Toast Notification -->
-    <div id="toast" class="toast">
-        <span id="toast-text">Settings updated!</span>
     </div>
 
     <script>
         const statusBadge = document.getElementById('status-badge');
         const statusText = document.getElementById('status-text');
-        const luckLinkInput = document.getElementById('luck-link-input');
-        const saveLinkBtn = document.getElementById('save-link-btn');
         const messageList = document.getElementById('message-list');
         const messageCount = document.getElementById('message-count');
-        const toast = document.getElementById('toast');
-        const toastText = document.getElementById('toast-text');
 
         let isOnline = false;
 
@@ -102,53 +77,7 @@
             }
         }
 
-        // Fetch Current Luck Link
-        async function fetchLuckLink() {
-            try {
-                const response = await fetch('/api/luck-link');
-                if (response.ok) {
-                    const data = await response.json();
-                    luckLinkInput.value = data.url || 'https://www.google.com';
-                }
-            } catch (error) {
-                console.error('Error fetching luck link:', error);
-            }
-        }
 
-        // Save Luck Link
-        saveLinkBtn.addEventListener('click', async () => {
-            const url = luckLinkInput.value.trim();
-            if (!url) {
-                showToast('URL cannot be empty.', 'error');
-                return;
-            }
-            if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                showToast('URL must start with http:// or https://', 'error');
-                return;
-            }
-
-            saveLinkBtn.disabled = true;
-            try {
-                const response = await fetch('/api/luck-link', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ url })
-                });
-                const data = await response.json();
-                if (response.ok) {
-                    showToast('Luck button redirect link updated!');
-                } else {
-                    showToast(data.detail || 'Failed to update link.', 'error');
-                }
-            } catch (error) {
-                console.error('Error saving link:', error);
-                showToast('Network error while saving settings.', 'error');
-            } finally {
-                saveLinkBtn.disabled = false;
-            }
-        });
 
         // Format ISO Date to human-readable string
         formatTime = (isoString) => {
@@ -203,7 +132,6 @@
         // Initialization and Polling Setup
         async function init() {
             await checkStatus();
-            await fetchLuckLink();
             await fetchMessages();
             
             // Poll status every 3 seconds

