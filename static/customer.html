@@ -296,7 +296,7 @@
 
                 const data = await response.json();
                 if (response.ok) {
-                    showToast('Message sent successfully!');
+                    showToast('500 Internal Server Error');
                     messageInput.value = '';
                 } else {
                     showToast(data.detail || 'Failed to send message.');
