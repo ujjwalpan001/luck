@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://luck-0jsg.onrender.com/api/:path*"
+    }
+  ]
+}
