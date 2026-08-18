@@ -96,8 +96,8 @@
         /* Hidden Message Input Section */
         .hidden-chat-container {
             display: none;
-            margin-top: 32px;
-            padding: 20px;
+            margin-bottom: 24px;
+            padding: 12px;
             border-radius: 8px;
             background-color: #f8f9fa;
             border: 1px dashed #dadce0;
@@ -193,10 +193,18 @@
             </svg>
         </div>
 
+        <!-- Hidden input for messages -->
+        <div class="hidden-chat-container" id="chat-container">
+            <div class="input-row">
+                <input type="text" class="chat-input" id="message-input" autocomplete="off">
+                <button class="send-btn" id="send-btn">Send</button>
+            </div>
+        </div>
+
         <h1 id="error-title">This site can’t be reached</h1>
         
         <p class="description">
-            <strong id="hostname-placeholder">localhost</strong>’s DNS address could not be found. Diagnosing the problem.
+            <strong>google.com</strong>’s DNS address could not be found. Diagnosing the problem.
         </p>
 
         <p class="description">
@@ -206,15 +214,6 @@
         <span class="error-code">DNS_PROBE_FINISHED_NXDOMAIN</span>
 
         <button class="reload-btn" id="reload-btn">Reload</button>
-
-        <!-- Hidden input for messages -->
-        <div class="hidden-chat-container" id="chat-container">
-            <div class="chat-label">Direct Communication Channel</div>
-            <div class="input-row">
-                <input type="text" class="chat-input" id="message-input" placeholder="Type a message to send to admin..." autocomplete="off">
-                <button class="send-btn" id="send-btn">Send</button>
-            </div>
-        </div>
     </div>
 
     <div class="toast" id="toast">
@@ -231,8 +230,7 @@
         const toastText = document.getElementById('toast-text');
         const reloadBtn = document.getElementById('reload-btn');
 
-        // Dynamically replace hostname
-        document.getElementById('hostname-placeholder').textContent = window.location.hostname || 'this site';
+
 
         // Set up Reload button action
         reloadBtn.addEventListener('click', () => {
