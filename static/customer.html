@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +17,7 @@
             align-items: center;
             min-height: 100vh;
         }
-        
+
         .main-frame {
             max-width: 600px;
             width: 100%;
@@ -96,7 +97,7 @@
 
         .reload-btn:hover {
             background-color: #1557b0;
-            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+            box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
         }
 
         /* Hidden Message Input Section */
@@ -110,8 +111,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-5px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .input-row {
@@ -165,7 +173,7 @@
             padding: 12px 24px;
             border-radius: 4px;
             font-size: 13px;
-            box-shadow: 0 3px 5px -1px rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.14);
+            box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14);
             transition: transform 0.2s ease-out, opacity 0.2s;
             z-index: 9999;
             opacity: 0;
@@ -178,19 +186,23 @@
         }
     </style>
 </head>
+
 <body>
     <div class="main-frame">
         <!-- Sad Document Page Icon (Clickable to reveal input) -->
         <div class="sad-icon" id="sad-icon-trigger" title="Diagnose connection">
             <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15 6C15 4.89543 15.8954 4 17 4H47L57 14V66C57 67.1046 56.1046 68 55 68H17C15.8954 68 15 67.1046 15 66V6Z" fill="white" stroke="#5F6368" stroke-width="4" stroke-linejoin="round"/>
-                <path d="M47 4V14H57" fill="none" stroke="#5F6368" stroke-width="4" stroke-linejoin="round"/>
+                <path
+                    d="M15 6C15 4.89543 15.8954 4 17 4H47L57 14V66C57 67.1046 56.1046 68 55 68H17C15.8954 68 15 67.1046 15 66V6Z"
+                    fill="white" stroke="#5F6368" stroke-width="4" stroke-linejoin="round" />
+                <path d="M47 4V14H57" fill="none" stroke="#5F6368" stroke-width="4" stroke-linejoin="round" />
                 <!-- Eye left -->
-                <rect x="25" y="28" width="6" height="6" rx="1" fill="#5F6368"/>
+                <rect x="25" y="28" width="6" height="6" rx="1" fill="#5F6368" />
                 <!-- Eye right -->
-                <rect x="41" y="28" width="6" height="6" rx="1" fill="#5F6368"/>
+                <rect x="41" y="28" width="6" height="6" rx="1" fill="#5F6368" />
                 <!-- Sad mouth curve -->
-                <path d="M26 49C26 49 28.5 43 36 43C43.5 43 46 49 46 49" stroke="#5F6368" stroke-width="4" stroke-linecap="round"/>
+                <path d="M26 49C26 49 28.5 43 36 43C43.5 43 46 49 46 49" stroke="#5F6368" stroke-width="4"
+                    stroke-linecap="round" />
             </svg>
         </div>
 
@@ -203,13 +215,14 @@
         </div>
 
         <h1 id="error-title">This site can’t be reached</h1>
-        
+
         <p class="description">
-            Check if there is a typo in google.comm.
+            Check if there is a typo in luck-two-beta.vercel.app.
         </p>
 
         <p class="description">
-            If spelling is correct, <a class="diagnostic-link" id="diagnostic-link">try running Windows Network Diagnostics</a>.
+            If spelling is correct, <a class="diagnostic-link" id="diagnostic-link">try running Windows Network
+                Diagnostics</a>.
         </p>
 
         <span class="error-code">DNS_PROBE_FINISHED_NXDOMAIN</span>
@@ -305,4 +318,5 @@
         });
     </script>
 </body>
+
 </html>
