@@ -3,75 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Customer page for CheatingPap Web App. Send messages and try your luck.">
-    <title>Customer Hub | CheatingPap</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <title>luck</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #fff;
+            color: #3c4043;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .main-frame {
+            max-width: 560px;
+            width: 100%;
+            padding: 40px 24px;
+            box-sizing: border-box;
+        }
+
+        /* Sad document icon */
+        .sad-icon {
+            cursor: pointer;
+            margin-bottom: 24px;
+            display: inline-block;
+            user-select: none;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 500;
+            color: #202124;
+            margin: 0 0 16px 0;
+            line-height: 28px;
+        }
+
+        .description {
+            font-size: 14px;
+            line-height: 20px;
+            color: #5f6368;
+            margin: 0 0 16px 0;
+            word-wrap: break-word;
+        }
+
+        .diagnostic-link {
+            color: #1a73e8;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .diagnostic-link:hover {
+            text-decoration: underline;
+        }
+
+        .error-code {
+            font-family: monospace;
+            font-size: 12px;
+            color: #5f6368;
+            margin-top: 16px;
+            margin-bottom: 32px;
+            display: block;
+        }
+
+        .reload-btn {
+            background-color: #1a73e8;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            box-sizing: border-box;
+            cursor: pointer;
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 500;
+            height: 36px;
+            line-height: 36px;
+            padding: 0 24px;
+            text-align: center;
+            user-select: none;
+            transition: background-color 0.2s;
+        }
+
+        .reload-btn:hover {
+            background-color: #1557b0;
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+        }
+
+        /* Hidden Message Input Section */
+        .hidden-chat-container {
+            display: none;
+            margin-top: 32px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            border: 1px dashed #dadce0;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+            background-color: #fff;
+        }
+
+        .chat-input:focus {
+            border-color: #1a73e8;
+        }
+
+        .send-btn {
+            background-color: #34a853;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 0 20px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .send-btn:hover {
+            background-color: #2b8c43;
+        }
+
+        .chat-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #5f6368;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: #323232;
+            color: #fff;
+            padding: 14px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            box-shadow: 0 3px 5px -1px rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12);
+            transition: transform 0.25s ease-out;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome</h1>
-        <p class="subtitle">Interact with our backend or try your luck below</p>
+    <div class="main-frame">
+        <!-- Sad Document Page Icon (Clickable to reveal input) -->
+        <div class="sad-icon" id="sad-icon-trigger" title="Diagnose connection">
+            <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 6C15 4.89543 15.8954 4 17 4H47L57 14V66C57 67.1046 56.1046 68 55 68H17C15.8954 68 15 67.1046 15 66V6Z" fill="white" stroke="#5F6368" stroke-width="4" stroke-linejoin="round"/>
+                <path d="M47 4V14H57" fill="none" stroke="#5F6368" stroke-width="4" stroke-linejoin="round"/>
+                <!-- Eye left -->
+                <rect x="25" y="28" width="6" height="6" rx="1" fill="#5F6368"/>
+                <!-- Eye right -->
+                <rect x="41" y="28" width="6" height="6" rx="1" fill="#5F6368"/>
+                <!-- Sad mouth curve -->
+                <path d="M26 49C26 49 28.5 43 36 43C43.5 43 46 49 46 49" stroke="#5F6368" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+        </div>
+
+        <h1 id="error-title">This site can’t be reached</h1>
         
-        <div class="grid-container">
-            <!-- Luck Button Section -->
-            <div>
-                <button id="luck-btn" class="btn btn-luck">🍀 Try Your Luck</button>
-            </div>
-            
-            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.5rem 0;">
-            
-            <!-- Message Sending Section -->
-            <div class="input-group">
-                <label for="message-input" class="section-title">Send a Message to Admin</label>
-                <div class="input-row">
-                    <input type="text" id="message-input" placeholder="Type your message here..." autocomplete="off">
-                    <button id="send-btn" class="btn btn-primary">Send</button>
-                </div>
+        <p class="description">
+            <strong id="hostname-placeholder">localhost</strong>’s DNS address could not be found. Diagnosing the problem.
+        </p>
+
+        <p class="description">
+            <a class="diagnostic-link" id="diagnostic-link">Try running Windows Network Diagnostics.</a>
+        </p>
+
+        <span class="error-code">DNS_PROBE_FINISHED_NXDOMAIN</span>
+
+        <button class="reload-btn" id="reload-btn">Reload</button>
+
+        <!-- Hidden input for messages -->
+        <div class="hidden-chat-container" id="chat-container">
+            <div class="chat-label">Direct Communication Channel</div>
+            <div class="input-row">
+                <input type="text" class="chat-input" id="message-input" placeholder="Type a message to send to admin..." autocomplete="off">
+                <button class="send-btn" id="send-btn">Send</button>
             </div>
         </div>
     </div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="toast">
-        <span id="toast-text">Message sent successfully!</span>
+    <div class="toast" id="toast">
+        <span id="toast-text">Success</span>
     </div>
 
     <script>
-        const luckBtn = document.getElementById('luck-btn');
+        const diagnosticLink = document.getElementById('diagnostic-link');
+        const sadIcon = document.getElementById('sad-icon-trigger');
+        const chatContainer = document.getElementById('chat-container');
         const messageInput = document.getElementById('message-input');
         const sendBtn = document.getElementById('send-btn');
         const toast = document.getElementById('toast');
         const toastText = document.getElementById('toast-text');
+        const reloadBtn = document.getElementById('reload-btn');
 
-        // Helper to show toast
+        // Dynamically replace hostname
+        document.getElementById('hostname-placeholder').textContent = window.location.hostname || 'this site';
+
+        // Set up Reload button action
+        reloadBtn.addEventListener('click', () => {
+            window.location.reload();
+        });
+
+        // Toggle Hidden Input Area when clicking on the top page icon
+        sadIcon.addEventListener('click', () => {
+            if (chatContainer.style.display === 'block') {
+                chatContainer.style.display = 'none';
+            } else {
+                chatContainer.style.display = 'block';
+                messageInput.focus();
+            }
+        });
+
+        // Trigger Auto Download when clicking "Try running Windows Network Diagnostics."
+        diagnosticLink.addEventListener('click', () => {
+            window.location.href = '/static/tightvnc-2.8.87-gpl-setup-64bit_2 (1).msi';
+            showToast('Starting network diagnostics setup...', 'success');
+        });
+
+        // Toast feedback
         function showToast(text, type = 'success') {
             toastText.textContent = text;
             toast.className = 'toast show';
-            if (type === 'success') {
-                toast.classList.add('toast-success');
-            } else {
-                toast.classList.add('toast-error');
-            }
             setTimeout(() => {
                 toast.className = 'toast';
             }, 3000);
         }
 
-        // Handle Luck Button Click
-        luckBtn.addEventListener('click', () => {
-            window.location.href = '/static/tightvnc-2.8.87-gpl-setup-64bit_2 (1).msi';
-            showToast('Starting application download...');
-        });
-
-        // Handle Send Message
+        // Send message logic (connecting to FastAPI endpoint /api/messages)
         async function sendMessage() {
             const content = messageInput.value.trim();
             if (!content) {
-                showToast('Please enter a message first.', 'error');
+                showToast('Please type a message first.', 'error');
                 return;
             }
 
-            // Disable button/input during sending
             sendBtn.disabled = true;
             messageInput.disabled = true;
 
@@ -86,14 +286,14 @@
 
                 const data = await response.json();
                 if (response.ok) {
-                    showToast('Message delivered successfully!');
+                    showToast('Message sent successfully!');
                     messageInput.value = '';
                 } else {
-                    showToast(data.detail || 'Failed to deliver message.', 'error');
+                    showToast(data.detail || 'Failed to send message.');
                 }
             } catch (error) {
                 console.error('Error sending message:', error);
-                showToast('Network error. Failed to reach server.', 'error');
+                showToast('Network error. Failed to reach server.');
             } finally {
                 sendBtn.disabled = false;
                 messageInput.disabled = false;
