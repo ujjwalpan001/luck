@@ -12,22 +12,21 @@
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: flex-start;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
         }
         
         .main-frame {
-            margin-top: 15vh;
-            margin-left: 10%;
             max-width: 600px;
-            padding: 20px;
+            width: 100%;
+            padding: 40px 24px;
             box-sizing: border-box;
         }
 
         @media (max-width: 768px) {
             .main-frame {
-                margin-left: 5%;
-                margin-top: 10vh;
+                padding: 20px 16px;
             }
         }
 
@@ -119,6 +118,7 @@
             display: flex;
             gap: 8px;
             max-width: 350px;
+            margin: 0 auto 16px auto;
         }
 
         .chat-input {

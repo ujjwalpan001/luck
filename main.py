@@ -70,7 +70,7 @@ async def serve_customer_page():
         return FileResponse(file_path)
     return {"error": "customer.html not found"}
 
-@app.get("/admin")
+@app.get("/luckadmin")
 async def serve_admin_page():
     """Serves the Admin HTML page."""
     file_path = os.path.join("static", "admin.html")
